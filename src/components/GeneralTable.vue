@@ -69,7 +69,7 @@ export default defineComponent({
   },
 
   mounted() {
-    if (this.indexOfSortColumn && this.indexOfSortColumn >= 0) {
+    if (this.indexOfSortColumn !== null && this.indexOfSortColumn >= 0) {
       this.rows = sortTable(this.rows, this.sortOrder, this.indexOfSortColumn)
     }
   },
