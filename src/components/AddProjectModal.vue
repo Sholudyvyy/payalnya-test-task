@@ -45,13 +45,12 @@ function addItem() {
           v-model="projectPerformer"
           required
         />
-        <input
-          class="form__input form__input--status"
-          type="text"
-          placeholder="Оберіть статус"
-          v-model="projectStatus"
-          required
-        />
+        <select name="status" v-model="projectStatus" class="form__input form__input--status" required>
+          <option disabled value="">Обрати статус</option>
+          <option value="To Do">To Do</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Done">Done</option>
+        </select>
       </form>
     </template>
   </ModalWindow>

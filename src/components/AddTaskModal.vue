@@ -122,6 +122,7 @@ function addItem() {
               />
             </svg>
             <select name="status" v-model="taskStatus" class="form-input" required>
+              <option disabled value="">Обрати статус</option>
               <option value="To Do">To Do</option>
               <option value="In Progress">In Progress</option>
               <option value="Done">Done</option>
