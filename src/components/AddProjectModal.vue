@@ -28,13 +28,13 @@ function addItem() {
 </script>
 
 <template>
-  <ModalWindow name="Завдання" @add="addItem">
+  <ModalWindow name="Новий проект" @add="addItem">
     <template v-slot:main>
       <form class="form">
         <input
           class="form__input form__input--text"
           type="text"
-          placeholder="Введіть назву завдання"
+          placeholder="Введіть назву проекту"
           v-model="projectName"
           required
         />

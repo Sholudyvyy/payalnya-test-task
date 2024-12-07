@@ -45,7 +45,7 @@ function addItem() {
 </script>
 
 <template>
-  <ModalWindow name="Завдання" @add="addItem">
+  <ModalWindow name="Нове завдання" @add="addItem">
     <template v-slot:main>
       <form class="task-form">
         <div class="form-group">
