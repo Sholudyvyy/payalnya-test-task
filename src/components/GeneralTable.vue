@@ -182,9 +182,9 @@ export default defineComponent({
               </th>
               <td v-else-if="index === 3" class="status-cell">
                 <div class="status-container">
-                  <div class="status-item todo">To Do</div>
-                  <div class="status-item in-progress">In Progress</div>
-                  <div class="status-item done">Done</div>
+                  <div class="status-item todo" :style="{ visibility: date === 'To Do' ? 'visible' : 'hidden' }">To Do</div>
+                  <div class="status-item in-progress" :style="{ visibility: date === 'In Progress' ? 'visible' : 'hidden' }">In Progress</div>
+                  <div class="status-item done" :style="{ visibility: date === 'Done' ? 'visible' : 'hidden' }">Done</div>
                 </div>
               </td>
               <td v-else class="table-cell">{{ date }}</td>
