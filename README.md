@@ -1,39 +1,79 @@
-# payalnya-test-task
+# 📊 Project Management SPA
 
-This template should help get you started developing with Vue 3 in Vite.
+[Click here to see DEMO LINK]([https://your-project-demo-link.com](https://sholudyvyy.github.io/payalnya-test-task/#/))
 
-## Recommended IDE Setup
+## 🚀 Project Overview
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+A powerful Single Page Application for seamless project and task management, built with cutting-edge web technologies.
 
-## Type Support for `.vue` Imports in TS
+![Vue.js](https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-blue?style=for-the-badge&logo=typescript&logoColor=white)
+![Pinia](https://img.shields.io/badge/Pinia-yellow?style=for-the-badge&logo=data:image/png;base64,YOUR_PINIA_LOGO_BASE64)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## ✨ Key Features
 
-## Customize configuration
+### 🗂 Project Management
+- Interactive projects dashboard
+- Drag-and-drop task management
+- Comprehensive filtering and sorting
+- Real-time status updates
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### 📋 Task Tracking
+- Detailed task creation
+- Status tracking (Todo, In Progress, Done)
+- Visual task distribution charts
 
-## Project Setup
+## 🛠 Tech Stack
 
-```sh
+- **Frontend**: Vue.js 3 (Composition API)
+- **State Management**: Pinia
+- **Styling**: SCSS
+- **HTTP Client**: Axios
+- **Additional Libraries**:
+  - Vue Draggable
+  - Vue Datepicker
+  - Vue Toastification
+  - Chart.js
+
+## 🔧 Installation
+
+### Prerequisites
+- Node.js v22.11.0
+- npm v10.9.0
+
+### Setup
+
+1. Clone the repository
+```bash
+git clone https://github.com/Sholudyvyy/payalnya-test-task.git
+cd payalnya-test-task
+```
+
+2. Install dependencies
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
+3. Run development server
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+## 🔧 Usage
 
-```sh
-npm run build
-```
+Once the app is running, you can:
 
-### Lint with [ESLint](https://eslint.org/)
+- Create new projects and tasks.
+- Use drag-and-drop to manage tasks.
+- Filter and sort tasks based on their status.
+- View real-time status updates on the dashboard.
+- View task distribution charts for better tracking.
 
-```sh
-npm run lint
-```
+## 🌟 Features Highlights
+
+- 💾 LocalStorage state persistence
+- 🔔 Toast notifications
+- 📊 Task status distribution charts
+- 🖱 Drag-and-drop interfaces
+- 📝 Comprehensive form validations
+
