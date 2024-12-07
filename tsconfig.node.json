@@ -11,6 +11,9 @@
     "composite": true,
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
 
     "module": "ESNext",
     "moduleResolution": "Bundler",
