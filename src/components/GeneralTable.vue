@@ -326,6 +326,7 @@ $color-green-900: #064e3b;
         padding: 12px 16px;
         border-bottom: 1px solid $color-gray-200;
         color: $color-gray-500;
+        text-align: center;
       }
 
       .status-cell {
