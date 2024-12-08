@@ -48,6 +48,11 @@ watch(status, (newVal) => {
 function ToggleModal() {
   isModalOpen.value = !isModalOpen.value
 }
+
+function updateStatus(newStatus: string, id: number) {
+  console.log(newStatus)
+  tasksStore.updateTaskStatus(id, newStatus)
+}
 </script>
 
 <template>
@@ -107,6 +112,7 @@ function ToggleModal() {
   <GeneralTable
     v-if="!isLoadingTasks && !errorTasks"
     name="tasks"
+    @updateStatus="updateStatus"
     :key="visibleTasks.length"
     :isRowsDraggable="true"
     :customColumns="[

@@ -60,5 +60,15 @@ export const useTasksStore = defineStore('tasks', {
         position: POSITION.BOTTOM_RIGHT,
       })
     },
+    updateTaskStatus(id: number, newStatus: string) {
+      const taskIndex = this.tasks.findIndex((task) => task.id === id)
+      this.tasks[taskIndex].status = newStatus;
+
+      localStorage.setItem('tasks', JSON.stringify(this.tasks))
+
+      toast.success('Cтатус завдання змінено', {
+        position: POSITION.BOTTOM_RIGHT,
+      })
+    },
   },
 })

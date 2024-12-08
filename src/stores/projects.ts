@@ -56,5 +56,15 @@ export const useProjectsStore = defineStore('projects', {
         position: POSITION.BOTTOM_RIGHT,
       })
     },
+    updateProjectStatus(id: number, newStatus: string) {
+      const projectIndex = this.projects.findIndex((project) => project.id === id)
+      this.projects[projectIndex].status = newStatus;
+
+      localStorage.setItem('projects', JSON.stringify(this.projects))
+
+      toast.success('Cтатус проекту змінено', {
+        position: POSITION.BOTTOM_RIGHT,
+      })
+    },
   },
 })

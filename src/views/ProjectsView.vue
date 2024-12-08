@@ -65,6 +65,11 @@ function goToTasks(projectId: string) {
     },
   )
 }
+
+function updateStatus(newStatus: string, id: number) {
+  console.log(newStatus)
+  projectsStore.updateProjectStatus(id, newStatus)
+}
 </script>
 
 <template>
@@ -143,6 +148,7 @@ function goToTasks(projectId: string) {
   <GeneralTable
     v-if="!isLoadingProject && !isLoadingTasks && !errorProject && !errorTasks"
     @goToItem="goToTasks"
+    @updateStatus="updateStatus"
     name="projects"
     :key="visibleProjects.length"
     :isRowsDraggable="false"

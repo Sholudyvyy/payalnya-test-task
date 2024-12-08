@@ -1,142 +1,119 @@
-<script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, reactive, ref, watch } from 'vue'
 import { sortTable } from '@/utils/sortTable'
-import draggable from 'vuedraggable'
 import { POSITION, useToast } from 'vue-toastification'
 import { getFromLocalStorage } from '@/utils/getFromLocalStorage'
+import StatusController from './StatusController.vue'
+import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
-export default defineComponent({
-  name: 'GeneralTable',
-  components: { draggable },
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    isRowsDraggable: {
-      type: Boolean,
-      required: true,
-    },
-    customColumns: {
-      type: Array as () => Array<{ name: string; width: number; sort: boolean }>,
-      required: true,
-    },
-    customRows: {
-      type: Array as () => Array<Array<string>>,
-      required: true,
-    },
+const emit = defineEmits(['updateStatus', 'goToItem'])
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
   },
-  setup(props) {
-    const toast = useToast()
-    const isModalOpen = ref(false)
-    const columns = ref(props.customColumns.map((column) => ({ ...column })))
-    const rows = ref(props.customRows.map((row) => [...row]))
-    const indexOfSortColumn = ref(
-      getFromLocalStorage<number>(`${props.name}IndexOfSortColumn`) === null
-        ? -1
-        : getFromLocalStorage<number>(`${props.name}IndexOfSortColumn`),
-    )
-    const sortOrder = ref(getFromLocalStorage<string>(`${props.name}SortOrder`) || '')
-
-    const tasks = {
-      todo: [
-        { id: 1, title: 'Task 1' },
-        { id: 2, title: 'Task 2' },
-      ],
-      inProgress: [{ id: 3, title: 'Task 3' }],
-      done: [{ id: 4, title: 'Task 4' }],
-    }
-
-    const state = reactive({
-      query: '',
-      status: '',
-      isResizing: false,
-      currentColumn: null as number | null,
-      startX: 0,
-      startWidth: 0,
-    })
-
-    return {
-      toast,
-      tasks,
-      isModalOpen,
-      indexOfSortColumn,
-      sortOrder,
-      columns,
-      rows,
-      ...state,
-    }
+  isRowsDraggable: {
+    type: Boolean,
+    required: true,
   },
-
-  mounted() {
-    if (this.indexOfSortColumn !== null && this.indexOfSortColumn >= 0) {
-      this.rows = sortTable(this.rows, this.sortOrder, this.indexOfSortColumn)
-    }
+  customColumns: {
+    type: Array as () => Array<{ name: string; width: number; sort: boolean }>,
+    required: true,
   },
-
-  watch: {
-    indexOfSortColumn(newVal) {
-      localStorage.setItem(`${this.name}IndexOfSortColumn`, JSON.stringify(newVal))
-    },
-    sortOrder(newVal) {
-      localStorage.setItem(`${this.name}SortOrder`, JSON.stringify(newVal))
-    },
-  },
-
-  methods: {
-    startResize(event: MouseEvent, index: number) {
-      this.isResizing = true
-      this.currentColumn = index
-      this.startX = event.clientX
-      this.startWidth = this.columns[index].width
-
-      document.addEventListener('mousemove', this.handleResize)
-      document.addEventListener('mouseup', this.stopResize)
-    },
-    handleResize(event: MouseEvent) {
-      if (!this.isResizing) return
-
-      const deltaX = event.clientX - this.startX
-      const newWidth = this.startWidth + deltaX
-
-      this.columns[this.currentColumn as number].width = Math.min(Math.max(50, newWidth), 300)
-    },
-    stopResize() {
-      this.isResizing = false
-      this.currentColumn = null
-
-      document.removeEventListener('mousemove', this.handleResize)
-      document.removeEventListener('mouseup', this.stopResize)
-    },
-    sortColumns(rowIndex: number) {
-      this.toast.success('Таблиця відсортована', {
-        position: POSITION.BOTTOM_RIGHT,
-      })
-
-      if (this.indexOfSortColumn === rowIndex) {
-        this.sortOrder = this.sortOrder === '' ? 'asc' : this.sortOrder === 'asc' ? 'desc' : ''
-      } else {
-        this.sortOrder = 'asc'
-      }
-
-      if (this.sortOrder === '') {
-        this.rows = this.customRows.map((row) => [...row])
-        this.indexOfSortColumn = -1
-
-        return
-      }
-
-      this.indexOfSortColumn = rowIndex
-
-      this.rows = sortTable(this.rows, this.sortOrder, this.indexOfSortColumn)
-    },
-    endDrag() {
-      this.toast.success('Порядок завдань змінено', {
-        position: POSITION.BOTTOM_RIGHT,
-      })
-    },
+  customRows: {
+    type: Array as () => Array<Array<string>>,
+    required: true,
   },
 })
+const toast = useToast()
+const isModalOpen = ref(false)
+const columns = reactive(props.customColumns.map((column) => ({ ...column })))
+const rows = reactive(props.customRows.map((row) => [...row]))
+const indexOfSortColumn = ref(
+  getFromLocalStorage<number>(`${props.name}IndexOfSortColumn`) === null
+    ? -1
+    : getFromLocalStorage<number>(`${props.name}IndexOfSortColumn`),
+)
+const sortOrder = ref(getFromLocalStorage<string>(`${props.name}SortOrder`) || '')
+const query = ref('')
+const status = ref('')
+const isResizing = ref(false)
+const currentColumn = ref<number>()
+const startX = ref(0)
+const startWidth = ref(0)
+
+onMounted(() => {
+  if (indexOfSortColumn.value !== null && indexOfSortColumn.value >= 0) {
+    rows.splice(0, rows.length, ...sortTable(rows, sortOrder.value, indexOfSortColumn.value))
+  }
+})
+
+watch(indexOfSortColumn, (newVal) => {
+  localStorage.setItem(`${name}IndexOfSortColumn`, JSON.stringify(newVal))
+})
+
+watch(sortOrder, (newVal) => {
+  localStorage.setItem(`${name}SortOrder`, JSON.stringify(newVal))
+})
+
+function startResize(event: MouseEvent, index: number) {
+  isResizing.value = true
+  currentColumn.value = index
+  startX.value = event.clientX
+  startWidth.value = columns[index].width
+
+  document.addEventListener('mousemove', handleResize)
+  document.addEventListener('mouseup', stopResize)
+}
+function handleResize(event: MouseEvent) {
+  if (!isResizing.value) return
+
+  const deltaX = event.clientX - startX.value
+  const newWidth = startWidth.value + deltaX
+
+  columns[currentColumn.value as number].width = Math.min(Math.max(50, newWidth), 300)
+}
+
+function stopResize() {
+  isResizing.value = false
+  currentColumn.value = undefined
+
+  document.removeEventListener('mousemove', handleResize)
+  document.removeEventListener('mouseup', stopResize)
+}
+
+function sortColumns(rowIndex: number) {
+  toast.success('Таблиця відсортована', {
+    position: POSITION.BOTTOM_RIGHT,
+  })
+
+  if (indexOfSortColumn.value === rowIndex) {
+    sortOrder.value = sortOrder.value === '' ? 'asc' : sortOrder.value === 'asc' ? 'desc' : ''
+  } else {
+    sortOrder.value = 'asc'
+  }
+
+  if (sortOrder.value === '') {
+    rows.splice(0, rows.length, ...props.customRows.map((row) => [...row]))
+    indexOfSortColumn.value = -1
+
+    return
+  }
+
+  indexOfSortColumn.value = rowIndex
+
+  rows.splice(0, rows.length, ...sortTable(rows, sortOrder.value, indexOfSortColumn.value))
+}
+
+function endDrag() {
+  toast.success('Порядок завдань змінено', {
+    position: POSITION.BOTTOM_RIGHT,
+  })
+}
+
+function updateStatus(newStatus: string, id: number) {
+  emit('updateStatus', newStatus, id)
+}
 </script>
 
 <template>
@@ -164,33 +141,35 @@ export default defineComponent({
 
       <draggable
         v-if="rows.length"
-        v-model="rows"
+        :list="rows"
         tag="tbody"
-        item-key="name"
+        item-key="id"
         :disabled="!isRowsDraggable"
-        @end="endDrag"
+        @update="endDrag"
       >
-        <template #item="{ element }">
+        <transition-group type="transition" name="flip-list">
           <tr
             class="table-row"
+            v-for="element in rows"
+            :key="element[0]"
             @click="$emit('goToItem', element[0])"
             :class="{ 'hover-effect': true }"
           >
-            <template v-for="(date, index) of element" :key="index">
+            <template v-for="(rowDate, index) of element" :key="index">
               <th scope="row" v-if="index === 0" class="table-row-header">
-                {{ date }}
+                {{ rowDate }}
               </th>
               <td v-else-if="index === 3" class="status-cell">
-                <div class="status-container">
-                  <div class="status-item todo" :style="{ visibility: date === 'To Do' ? 'visible' : 'hidden' }">To Do</div>
-                  <div class="status-item in-progress" :style="{ visibility: date === 'In Progress' ? 'visible' : 'hidden' }">In Progress</div>
-                  <div class="status-item done" :style="{ visibility: date === 'Done' ? 'visible' : 'hidden' }">Done</div>
-                </div>
+                <StatusController
+                  :id="+element[0]"
+                  :status="rowDate"
+                  @updateStatus="updateStatus"
+                ></StatusController>
               </td>
-              <td v-else class="table-cell">{{ date }}</td>
+              <td v-else class="table-cell">{{ rowDate }}</td>
             </template>
           </tr>
-        </template>
+        </transition-group>
       </draggable>
 
       <tbody v-else>
@@ -331,36 +310,6 @@ $color-green-900: #064e3b;
 
       .status-cell {
         padding: 0;
-
-        .status-container {
-          display: flex;
-          height: 100%;
-
-          .status-item {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            font-size: 0.75rem;
-            font-weight: 500;
-
-            &.todo {
-              background-color: $color-red-50;
-              color: $color-red-900;
-            }
-
-            &.in-progress {
-              background-color: $color-orange-50;
-              color: $color-orange-900;
-            }
-
-            &.done {
-              background-color: $color-green-50;
-              color: $color-green-900;
-            }
-          }
-        }
       }
     }
 
