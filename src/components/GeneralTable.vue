@@ -278,7 +278,7 @@ $color-green-900: #064e3b;
 
       .header-content {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
 
         .sort-icon {
