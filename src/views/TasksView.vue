@@ -25,7 +25,7 @@ const visibleTasks = computed(() => {
     .filter((task) => task.projectId === projectId.value)
     .filter((task) => {
       const matchesQuery =
-        !query.value || task.performer.toLowerCase().includes(query.value.toLowerCase())
+        !query.value || task.performer.toLowerCase().includes(query.value.trim().toLowerCase())
       const matchesStatus = !status.value || task.status === status.value
 
       return matchesQuery && matchesStatus

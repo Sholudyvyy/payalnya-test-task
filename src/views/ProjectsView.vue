@@ -28,7 +28,7 @@ const status = ref(getFromLocalStorage<string>('projectsStatus') || '')
 const visibleProjects = computed(() => {
   return projects.value.filter((project) => {
     const matchesQuery =
-      !query.value || project.name.toLowerCase().includes(query.value.toLowerCase())
+      !query.value || project.name.toLowerCase().includes(query.value.trim().toLowerCase())
     const matchesStatus = !status.value || project.status === status.value
 
     return matchesQuery && matchesStatus
