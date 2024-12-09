@@ -1,6 +1,6 @@
 # 📊 Project Management SPA
 
-[Click here to see DEMO LINK]([https://your-project-demo-link.com](https://sholudyvyy.github.io/payalnya-test-task/#/))
+[Click here to see DEMO LINK](https://sholudyvyy.github.io/payalnya-test-task/#/)
 
 ## 🚀 Project Overview
 
